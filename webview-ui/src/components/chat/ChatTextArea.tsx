@@ -6,6 +6,7 @@ import styled from "styled-components"
 import { mentionRegex, mentionRegexGlobal } from "@shared/context-mentions"
 import { ExtensionMessage } from "@shared/ExtensionMessage"
 import { useExtensionState } from "@/context/ExtensionStateContext"
+import { useTranslation } from "@/context/TranslationContext"
 import {
 	ContextMenuOptionType,
 	getContextMenuOptions,
@@ -260,6 +261,7 @@ const ChatTextArea = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 		ref,
 	) => {
 		const { filePaths, chatSettings, apiConfiguration, openRouterModels, platform, workflowToggles } = useExtensionState()
+		const { t, isRtl } = useTranslation()
 		const [isTextAreaFocused, setIsTextAreaFocused] = useState(false)
 		const [isDraggingOver, setIsDraggingOver] = useState(false)
 		const [gitCommits, setGitCommits] = useState<GitCommit[]>([])
@@ -1486,7 +1488,7 @@ const ChatTextArea = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 							}
 							onHeightChange?.(height)
 						}}
-						placeholder={showUnsupportedFileError || showDimensionError ? "" : placeholderText}
+						placeholder={showUnsupportedFileError || showDimensionError ? "" : t("chat.placeholder")}
 						maxRows={10}
 						autoFocus={true}
 						style={{

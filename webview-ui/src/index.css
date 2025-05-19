@@ -29,6 +29,38 @@ body {
 	line-height: 1.25;
 }
 
+/* RTL Support */
+html[dir="rtl"] body {
+	direction: rtl;
+	text-align: right;
+}
+
+/* RTL specific adjustments */
+html[dir="rtl"] .rtl {
+	direction: rtl;
+	text-align: right;
+}
+
+html[dir="rtl"] .ml-2 {
+	margin-left: 0;
+	margin-right: 0.5rem;
+}
+
+html[dir="rtl"] .mr-2 {
+	margin-right: 0;
+	margin-left: 0.5rem;
+}
+
+html[dir="rtl"] .ml-1 {
+	margin-left: 0;
+	margin-right: 0.25rem;
+}
+
+html[dir="rtl"] .mr-1 {
+	margin-right: 0;
+	margin-left: 0.25rem;
+}
+
 body.scrollable,
 .scrollable,
 body.code-block-scrollable,

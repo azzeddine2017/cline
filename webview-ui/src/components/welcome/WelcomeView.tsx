@@ -7,11 +7,13 @@ import ApiOptions from "@/components/settings/ApiOptions"
 import ClineLogoWhite from "@/assets/ClineLogoWhite"
 import { AccountServiceClient } from "@/services/grpc-client"
 import { EmptyRequest } from "@shared/proto/common"
+import { useTranslation } from "@/context/TranslationContext"
 
 const WelcomeView = memo(() => {
 	const { apiConfiguration } = useExtensionState()
 	const [apiErrorMessage, setApiErrorMessage] = useState<string | undefined>(undefined)
 	const [showApiOptions, setShowApiOptions] = useState(false)
+	const { t, isRtl } = useTranslation()
 
 	const disableLetsGoButton = apiErrorMessage != null
 
@@ -30,20 +32,14 @@ const WelcomeView = memo(() => {
 	}, [apiConfiguration])
 
 	return (
-		<div className="fixed inset-0 p-0 flex flex-col">
+		<div className={`fixed inset-0 p-0 flex flex-col ${isRtl ? 'rtl' : ''}`}>
 			<div className="h-full px-5 overflow-auto">
-				<h2>Hi, I'm Cline</h2>
+				<h2>{t("welcome.title")}</h2>
 				<div className="flex justify-center my-5">
 					<ClineLogoWhite className="size-16" />
 				</div>
 				<p>
-					I can do all kinds of tasks thanks to breakthroughs in{" "}
-					<VSCodeLink href="https://www.anthropic.com/claude/sonnet" className="inline">
-						Claude 3.7 Sonnet's
-					</VSCodeLink>
-					agentic coding capabilities and access to tools that let me create & edit files, explore complex projects, use
-					a browser, and execute terminal commands <i>(with your permission, of course)</i>. I can even use MCP to
-					create new tools and extend my own capabilities.
+					{t("welcome.description")}
 				</p>
 
 				<p className="text-[var(--vscode-descriptionForeground)]">
@@ -52,7 +48,7 @@ const WelcomeView = memo(() => {
 				</p>
 
 				<VSCodeButton appearance="primary" onClick={handleLogin} className="w-full mt-1">
-					Get Started for Free
+					{t("welcome.getStarted")}
 				</VSCodeButton>
 
 				{!showApiOptions && (
