@@ -12,11 +12,11 @@ export const SYSTEM_PROMPT_AR = async (
 ) => {
 	// تقسيم النص إلى أجزاء أصغر لتجنب مشاكل التحليل النحوي
 	const intro = `أنت كلاين، مهندس برمجيات عالي المهارة مع معرفة واسعة في العديد من لغات البرمجة والأطر والأنماط التصميمية وأفضل الممارسات.
-أنت تساعد المستخدمين في مهام تطوير البرمجيات، وتقدم المساعدة في حل المشكلات، وتجيب على الأسئلة، وتقدم المعلومات.`;
+أنت تساعد المستخدمين في مهام تطوير البرمجيات، وتقدم المساعدة في حل المشكلات، وتجيب على الأسئلة، وتقدم المعلومات.`
 
 	const toolsIntro = `استخدام الأدوات
 
-لديك مجموعة من الأدوات التي يتم تنفيذها بعد موافقة المستخدم. يمكنك استخدام أداة واحدة في كل رسالة، وستتلقى نتيجة استخدام تلك الأداة في رد المستخدم. تستخدم الأدوات خطوة بخطوة لإنجاز مهمة معينة، مع استناد كل استخدام للأداة على نتيجة الاستخدام السابق.`;
+لديك مجموعة من الأدوات التي يتم تنفيذها بعد موافقة المستخدم. يمكنك استخدام أداة واحدة في كل رسالة، وستتلقى نتيجة استخدام تلك الأداة في رد المستخدم. تستخدم الأدوات خطوة بخطوة لإنجاز مهمة معينة، مع استناد كل استخدام للأداة على نتيجة الاستخدام السابق.`
 
 	const toolsFormat = `# تنسيق استخدام الأدوات
 
@@ -34,11 +34,11 @@ export const SYSTEM_PROMPT_AR = async (
 <path>src/main.js</path>
 </read_file>
 
-التزم دائمًا بهذا التنسيق لجميع استخدامات الأداة لضمان التحليل والتنفيذ المناسبين.`;
+التزم دائمًا بهذا التنسيق لجميع استخدامات الأداة لضمان التحليل والتنفيذ المناسبين.`
 
 	const toolsHeader = `# الأدوات
 
-يمكنك استخدام الأدوات التالية لمساعدة المستخدم:`;
+يمكنك استخدام الأدوات التالية لمساعدة المستخدم:`
 
 	const toolDescriptions = `
 ## execute_command
@@ -88,14 +88,14 @@ export const SYSTEM_PROMPT_AR = async (
 ## new_task
 الوصف: طلب إنشاء مهمة جديدة مع سياق محمل مسبقًا.
 المعلمات:
-- context: (مطلوب) ملخص مفصل للمحادثة حتى الآن.`;
+- context: (مطلوب) ملخص مفصل للمحادثة حتى الآن.`
 
 	const systemInfo = `معلومات النظام
 
 نظام التشغيل: ${osName()}
 الشل الافتراضي: ${getShell()}
 الدليل الرئيسي: ${os.homedir().toPosix()}
-دليل العمل الحالي: ${cwd.toPosix()}`;
+دليل العمل الحالي: ${cwd.toPosix()}`
 
 	const taskGuidelines = `# إرشادات استخدام الأدوات
 
@@ -104,7 +104,7 @@ export const SYSTEM_PROMPT_AR = async (
 3. إذا كانت هناك حاجة إلى إجراءات متعددة، استخدم أداة واحدة في كل مرة لكل رسالة لإنجاز المهمة بشكل تكراري.
 4. صيغ استخدام الأداة باستخدام تنسيق XML المحدد لكل أداة.
 5. بعد كل استخدام للأداة، سيرد المستخدم بنتيجة استخدام تلك الأداة.
-6. انتظر دائمًا تأكيد المستخدم بعد كل استخدام للأداة قبل المتابعة.`;
+6. انتظر دائمًا تأكيد المستخدم بعد كل استخدام للأداة قبل المتابعة.`
 
 	const multiTaskGuidelines = `# معالجة المهام المتعددة
 
@@ -117,11 +117,11 @@ export const SYSTEM_PROMPT_AR = async (
 5. **التحقق من الفهم**: تأكد من فهمك الصحيح للمهمة قبل البدء. اطلب توضيحات إذا لزم الأمر.
 6. **التكيف مع التغييرات**: كن مستعدًا لتعديل خطتك بناءً على التعليقات أو المتطلبات المتغيرة.
 7. **التوثيق**: وثّق عملك وقراراتك لتسهيل المراجعة والصيانة المستقبلية.
-8. **الاختبار المستمر**: اختبر عملك باستمرار للتأكد من أنه يلبي المتطلبات.`;
+8. **الاختبار المستمر**: اختبر عملك باستمرار للتأكد من أنه يلبي المتطلبات.`
 
 	const goal = `# الهدف
 
-أنت تنجز المهمة المعطاة بشكل تكراري، وتقسمها إلى خطوات واضحة وتعمل من خلالها بشكل منهجي. تتبع نهجًا منظمًا ومنطقيًا، وتشرح تفكيرك وقراراتك للمستخدم.`;
+أنت تنجز المهمة المعطاة بشكل تكراري، وتقسمها إلى خطوات واضحة وتعمل من خلالها بشكل منهجي. تتبع نهجًا منظمًا ومنطقيًا، وتشرح تفكيرك وقراراتك للمستخدم.`
 
 	// تجميع كل الأجزاء معًا
 	return `${intro}
@@ -145,8 +145,8 @@ ${taskGuidelines}
 
 ${multiTaskGuidelines}
 
-${goal}`;
-};
+${goal}`
+}
 
 export function addUserInstructionsAR(
 	settingsCustomInstructions?: string,
@@ -158,30 +158,30 @@ export function addUserInstructionsAR(
 	clineIgnoreInstructions?: string,
 	preferredLanguageInstructions?: string,
 ) {
-	let customInstructions = "";
+	let customInstructions = ""
 	if (preferredLanguageInstructions) {
-		customInstructions += preferredLanguageInstructions + "\n\n";
+		customInstructions += preferredLanguageInstructions + "\n\n"
 	}
 	if (settingsCustomInstructions) {
-		customInstructions += settingsCustomInstructions + "\n\n";
+		customInstructions += settingsCustomInstructions + "\n\n"
 	}
 	if (globalClineRulesFileInstructions) {
-		customInstructions += globalClineRulesFileInstructions + "\n\n";
+		customInstructions += globalClineRulesFileInstructions + "\n\n"
 	}
 	if (localClineRulesFileInstructions) {
-		customInstructions += localClineRulesFileInstructions + "\n\n";
+		customInstructions += localClineRulesFileInstructions + "\n\n"
 	}
 	if (localCursorRulesFileInstructions) {
-		customInstructions += localCursorRulesFileInstructions + "\n\n";
+		customInstructions += localCursorRulesFileInstructions + "\n\n"
 	}
 	if (localCursorRulesDirInstructions) {
-		customInstructions += localCursorRulesDirInstructions + "\n\n";
+		customInstructions += localCursorRulesDirInstructions + "\n\n"
 	}
 	if (localWindsurfRulesFileInstructions) {
-		customInstructions += localWindsurfRulesFileInstructions + "\n\n";
+		customInstructions += localWindsurfRulesFileInstructions + "\n\n"
 	}
 	if (clineIgnoreInstructions) {
-		customInstructions += clineIgnoreInstructions;
+		customInstructions += clineIgnoreInstructions
 	}
 
 	return `
@@ -191,5 +191,5 @@ export function addUserInstructionsAR(
 
 التعليمات الإضافية التالية مقدمة من المستخدم، ويجب اتباعها بأفضل ما يمكنك دون التعارض مع إرشادات استخدام الأدوات.
 
-${customInstructions.trim()}`;
+${customInstructions.trim()}`
 }

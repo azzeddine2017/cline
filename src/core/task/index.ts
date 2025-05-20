@@ -4446,7 +4446,7 @@ export class Task {
 	 * Aplica un contexto compartido de otra tarea
 	 * Implementación para TaskManager
 	 */
-	async applySharedContext(context: { fileContexts: string[], importantConcepts: string[] }): Promise<void> {
+	async applySharedContext(context: { fileContexts: string[]; importantConcepts: string[] }): Promise<void> {
 		// Agregar archivos de contexto al rastreador
 		for (const filePath of context.fileContexts) {
 			try {

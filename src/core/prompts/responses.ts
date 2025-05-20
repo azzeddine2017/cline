@@ -6,7 +6,7 @@ import { formatResponseAR } from "./responses.ar"
 
 // دالة لاختيار النسخة المناسبة من الاستجابات بناءً على اللغة المفضلة
 export const getFormatResponse = (preferredLanguage?: string) => {
-	return preferredLanguage === "Arabic" ? formatResponseAR : formatResponse;
+	return preferredLanguage === "Arabic" ? formatResponseAR : formatResponse
 }
 
 export const formatResponse = {
