@@ -8,7 +8,12 @@ import * as path from "path"
 import * as vscode from "vscode"
 import { handleGrpcRequest, handleGrpcRequestCancel } from "./grpc-handler"
 import { handleModelsServiceRequest } from "./models"
-import { EmptyRequest } from "@shared/proto/common"
+// Create a simple EmptyRequest class to replace the imported one
+class EmptyRequest {
+    static create() {
+        return {};
+    }
+}
 import { buildApiHandler } from "@api/index"
 import { cleanupLegacyCheckpoints } from "@integrations/checkpoints/CheckpointMigration"
 import { downloadTask } from "@integrations/misc/export-markdown"
@@ -46,6 +51,7 @@ import {
 	updateWorkspaceState,
 } from "../storage/state"
 import { Task, cwd } from "../task"
+import { advancedSystem } from "../advanced"
 import { ClineRulesToggles } from "@shared/cline-rules"
 import { sendStateUpdate } from "./state/subscribeToState"
 import { refreshClineRulesToggles } from "@core/context/instructions/user-instructions/cline-rules"
@@ -106,6 +112,15 @@ export class Controller {
 		this.outputChannel.appendLine("Disposing ClineProvider...")
 		await this.clearTask()
 		this.outputChannel.appendLine("Cleared task")
+
+		// حفظ حالة الأنظمة المتقدمة
+		try {
+			await advancedSystem.saveState()
+			this.outputChannel.appendLine("Saved advanced systems state")
+		} catch (error) {
+			console.error("Error saving advanced systems state:", error)
+		}
+
 		while (this.disposables.length) {
 			const x = this.disposables.pop()
 			if (x) {
@@ -185,6 +200,31 @@ export class Controller {
 			images,
 			historyItem,
 		)
+
+		// تطبيق التعلم على المهمة الجديدة
+		if (this.task && task) {
+			try {
+				// تعيين سياق المهمة
+				this.task.setTaskContext(task)
+
+				// تحليل الكود إذا كان ذلك مناسبًا
+				if (task.includes("code") || task.includes("file") || task.includes("project")) {
+					const codeAnalyzer = advancedSystem.getCodeAnalyzer()
+					const analysisResults = await codeAnalyzer.analyzeProject(cwd)
+					this.task.setAnalysisResults(analysisResults)
+				}
+
+				// تطبيق التعلم من النظام
+				const learningSystem = advancedSystem.getLearningSystem()
+				if (this.task) {
+					await learningSystem.applyLearning(this.task)
+				}
+
+				console.log("Applied advanced systems to new task")
+			} catch (error) {
+				console.error("Error applying advanced systems to task:", error)
+			}
+		}
 	}
 
 	async reinitExistingTaskFromId(taskId: string) {
@@ -212,6 +252,14 @@ export class Controller {
 				await this.postStateToWebview()
 				break
 			case "webviewDidLaunch":
+				// تهيئة الأنظمة المتقدمة
+				try {
+					await advancedSystem.initialize()
+					console.log("Advanced systems initialized")
+				} catch (error) {
+					console.error("Error initializing advanced systems:", error)
+				}
+
 				this.postStateToWebview()
 				this.workspaceTracker?.populateFilePaths() // don't await
 				getTheme().then((theme) =>

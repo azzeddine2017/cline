@@ -163,6 +163,11 @@ export class Task {
 	private parentTaskId?: string
 	private importantConcepts: string[] = []
 
+	// Advanced systems
+	private learningData: any = {}
+	private analysisResults: any = {}
+	private taskContext: string = ""
+
 	// streaming
 	isWaitingForFirstChunk = false
 	isStreaming = false
@@ -4412,23 +4417,23 @@ export class Task {
 	}
 
 	/**
-	 * Obtiene los contextos de archivo relevantes para esta tarea
-	 * Implementación para TaskManager
+	 * الحصول على سياقات الملفات ذات الصلة بهذه المهمة
+	 * تنفيذ لـ TaskManager
 	 */
 	async getRelevantFileContexts(): Promise<string[]> {
-		// Obtener los archivos más relevantes del rastreador de contexto de archivos
+		// الحصول على الملفات الأكثر صلة من متتبع سياق الملفات
 		const relevantFiles: string[] = []
 
 		try {
-			// Obtener archivos del rastreador de contexto
+			// الحصول على الملفات المتتبعة
 			const trackedFiles = await this.fileContextTracker.getTrackedFiles()
 
-			// Filtrar por los más relevantes (editados o leídos recientemente)
+			// تصفية الملفات الأكثر صلة (التي تم تعديلها أو قراءتها مؤخرًا)
 			for (const file of trackedFiles) {
 				relevantFiles.push(file)
 			}
 		} catch (error) {
-			console.error("Error al obtener contextos de archivo relevantes:", error)
+			console.error("خطأ في الحصول على سياقات الملفات ذات الصلة:", error)
 		}
 
 		return relevantFiles
@@ -4497,5 +4502,43 @@ export class Task {
 		if (!this.importantConcepts.includes(concept)) {
 			this.importantConcepts.push(concept)
 		}
+	}
+
+	/**
+	 * تعيين سياق المهمة
+	 */
+	setTaskContext(context: string): void {
+		this.taskContext = context
+	}
+
+	/**
+	 * الحصول على سياق المهمة المخصص
+	 */
+	getTaskContext(): string {
+		return this.taskContext
+	}
+
+	/**
+	 * تطبيق بيانات التعلم على المهمة
+	 */
+	applyLearning(patterns: any[], preferences: Map<string, string>): void {
+		this.learningData = {
+			patterns,
+			preferences: Object.fromEntries(preferences)
+		}
+	}
+
+	/**
+	 * تعيين نتائج تحليل الكود
+	 */
+	setAnalysisResults(results: any): void {
+		this.analysisResults = results
+	}
+
+	/**
+	 * الحصول على نتائج تحليل الكود
+	 */
+	getAnalysisResults(): any {
+		return this.analysisResults
 	}
 }
