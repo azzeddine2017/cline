@@ -236,7 +236,33 @@
 		},
 		"configuration": {
 			"title": "Cline",
-			"properties": {}
+			"properties": {
+				"cline.preferredLanguage": {
+					"type": "string",
+					"default": "English",
+					"enum": [
+						"English",
+						"Arabic - العربية",
+						"Portuguese - Português (Brasil)",
+						"Czech - Čeština",
+						"French - Français",
+						"German - Deutsch",
+						"Hindi - हिन्दी",
+						"Hungarian - Magyar",
+						"Italian - Italiano",
+						"Japanese - 日本語",
+						"Korean - 한국어",
+						"Polish - Polski",
+						"Portuguese - Português (Portugal)",
+						"Russian - Русский",
+						"Simplified Chinese - 简体中文",
+						"Spanish - Español",
+						"Traditional Chinese - 繁體中文",
+						"Turkish - Türkçe"
+					],
+					"description": "The preferred language for Cline responses and interface. / اللغة المفضلة لردود واجهة Cline."
+				}
+			}
 		}
 	},
 	"scripts": {

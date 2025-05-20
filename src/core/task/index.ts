@@ -64,7 +64,7 @@ import { AssistantMessageContent, parseAssistantMessageV2, ToolParamName, ToolUs
 import { constructNewFileContent } from "@core/assistant-message/diff"
 import { ClineIgnoreController } from "@core/ignore/ClineIgnoreController"
 import { parseMentions } from "@core/mentions"
-import { formatResponse } from "@core/prompts/responses"
+import { formatResponse, getFormatResponse } from "@core/prompts/responses"
 import { SYSTEM_PROMPT_AR } from "@core/prompts/system.ar"
 import { addUserInstructions, SYSTEM_PROMPT } from "@core/prompts/system"
 import { addUserInstructionsAR } from "@core/prompts/system.ar"
@@ -157,6 +157,11 @@ export class Task {
 	// Metadata tracking
 	private fileContextTracker: FileContextTracker
 	private modelContextTracker: ModelContextTracker
+
+	// Multi-task support
+	private relatedTaskIds: string[] = []
+	private parentTaskId?: string
+	private importantConcepts: string[] = []
 
 	// streaming
 	isWaitingForFirstChunk = false
@@ -2017,7 +2022,8 @@ export class Task {
 						const accessAllowed = this.clineIgnoreController.validateAccess(relPath)
 						if (!accessAllowed) {
 							await this.say("clineignore_error", relPath)
-							pushToolResult(formatResponse.toolError(formatResponse.clineIgnoreError(relPath)))
+							const formatter = getFormatResponse(this.chatSettings.preferredLanguage)
+							pushToolResult(formatter.toolError(formatter.clineIgnoreError(relPath)))
 							await this.saveCheckpoint()
 							break
 						}
@@ -2066,10 +2072,11 @@ export class Task {
 									// Add telemetry for diff edit failure
 									telemetryService.captureDiffEditFailure(this.taskId, this.api.getModel().id, errorType)
 
+									const formatter = getFormatResponse(this.chatSettings.preferredLanguage)
 									pushToolResult(
-										formatResponse.toolError(
+										formatter.toolError(
 											`${(error as Error)?.message}\n\n` +
-												formatResponse.diffError(relPath, this.diffViewProvider.originalContent),
+												formatter.diffError(relPath, this.diffViewProvider.originalContent),
 										),
 									)
 									await this.diffViewProvider.revertChanges()
@@ -2256,8 +2263,9 @@ export class Task {
 											diff: userEdits,
 										} satisfies ClineSayTool),
 									)
+									const formatter = getFormatResponse(this.chatSettings.preferredLanguage)
 									pushToolResult(
-										formatResponse.fileEditWithUserChanges(
+										formatter.fileEditWithUserChanges(
 											relPath,
 											userEdits,
 											autoFormattingEdits,
@@ -2266,8 +2274,9 @@ export class Task {
 										),
 									)
 								} else {
+									const formatter = getFormatResponse(this.chatSettings.preferredLanguage)
 									pushToolResult(
-										formatResponse.fileEditWithoutUserChanges(
+										formatter.fileEditWithoutUserChanges(
 											relPath,
 											autoFormattingEdits,
 											finalContent,
@@ -2326,7 +2335,8 @@ export class Task {
 								const accessAllowed = this.clineIgnoreController.validateAccess(relPath)
 								if (!accessAllowed) {
 									await this.say("clineignore_error", relPath)
-									pushToolResult(formatResponse.toolError(formatResponse.clineIgnoreError(relPath)))
+									const formatter = getFormatResponse(this.chatSettings.preferredLanguage)
+									pushToolResult(formatter.toolError(formatter.clineIgnoreError(relPath)))
 									await this.saveCheckpoint()
 									break
 								}
@@ -2408,7 +2418,8 @@ export class Task {
 
 								const [files, didHitLimit] = await listFiles(absolutePath, recursive, 200)
 
-								const result = formatResponse.formatFilesList(
+								const formatter = getFormatResponse(this.chatSettings.preferredLanguage)
+								const result = formatter.formatFilesList(
 									absolutePath,
 									files,
 									didHitLimit,
@@ -4398,5 +4409,93 @@ export class Task {
 		}
 
 		return `<environment_details>\n${details.trim()}\n</environment_details>`
+	}
+
+	/**
+	 * Obtiene los contextos de archivo relevantes para esta tarea
+	 * Implementación para TaskManager
+	 */
+	async getRelevantFileContexts(): Promise<string[]> {
+		// Obtener los archivos más relevantes del rastreador de contexto de archivos
+		const relevantFiles: string[] = []
+
+		try {
+			// Obtener archivos del rastreador de contexto
+			const trackedFiles = await this.fileContextTracker.getTrackedFiles()
+
+			// Filtrar por los más relevantes (editados o leídos recientemente)
+			for (const file of trackedFiles) {
+				relevantFiles.push(file)
+			}
+		} catch (error) {
+			console.error("Error al obtener contextos de archivo relevantes:", error)
+		}
+
+		return relevantFiles
+	}
+
+	/**
+	 * Obtiene los conceptos importantes identificados en esta tarea
+	 * Implementación para TaskManager
+	 */
+	getImportantConcepts(): string[] {
+		return this.importantConcepts
+	}
+
+	/**
+	 * Aplica un contexto compartido de otra tarea
+	 * Implementación para TaskManager
+	 */
+	async applySharedContext(context: { fileContexts: string[], importantConcepts: string[] }): Promise<void> {
+		// Agregar archivos de contexto al rastreador
+		for (const filePath of context.fileContexts) {
+			try {
+				await this.fileContextTracker.trackFileContext(filePath, "file_mentioned")
+			} catch (error) {
+				console.error("Error al aplicar contexto de archivo compartido:", error)
+			}
+		}
+
+		// Agregar conceptos importantes
+		this.importantConcepts = [...new Set([...this.importantConcepts, ...context.importantConcepts])]
+	}
+
+	/**
+	 * Establece la tarea padre de esta tarea
+	 */
+	setParentTaskId(taskId: string): void {
+		this.parentTaskId = taskId
+	}
+
+	/**
+	 * Agrega una tarea relacionada a esta tarea
+	 */
+	addRelatedTaskId(taskId: string): void {
+		if (!this.relatedTaskIds.includes(taskId)) {
+			this.relatedTaskIds.push(taskId)
+		}
+	}
+
+	/**
+	 * Obtiene el ID de la tarea padre
+	 */
+	getParentTaskId(): string | undefined {
+		return this.parentTaskId
+	}
+
+	/**
+	 * Obtiene los IDs de las tareas relacionadas
+	 */
+	getRelatedTaskIds(): string[] {
+		return this.relatedTaskIds
+	}
+
+	/**
+	 * Agrega un concepto importante a la tarea
+	 */
+	addImportantConcept(concept: string): void {
+		if (!this.importantConcepts.includes(concept)) {
+			this.importantConcepts.push(concept)
+		}
 	}
 }

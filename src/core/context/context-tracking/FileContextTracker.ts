@@ -173,4 +173,26 @@ export class FileContextTracker {
 		}
 		this.fileWatchers.clear()
 	}
+
+	/**
+	 * Obtiene todos los archivos rastreados para esta tarea
+	 * @returns Array de rutas de archivos rastreados
+	 */
+	async getTrackedFiles(): Promise<string[]> {
+		try {
+			const metadata = await getTaskMetadata(this.context, this.taskId)
+
+			// Obtener todos los archivos únicos del metadata
+			const trackedFiles = new Set<string>()
+
+			for (const entry of metadata.files_in_context) {
+				trackedFiles.add(entry.path)
+			}
+
+			return Array.from(trackedFiles)
+		} catch (error) {
+			console.error("Error al obtener archivos rastreados:", error)
+			return []
+		}
+	}
 }
