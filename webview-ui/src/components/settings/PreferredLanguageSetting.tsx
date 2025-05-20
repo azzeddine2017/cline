@@ -1,6 +1,7 @@
 import { VSCodeDropdown, VSCodeOption } from "@vscode/webview-ui-toolkit/react"
 import React from "react"
 import { ChatSettings } from "@shared/ChatSettings"
+import { useTranslation } from "@/context/TranslationContext"
 
 interface PreferredLanguageSettingProps {
 	chatSettings: ChatSettings
@@ -8,10 +9,12 @@ interface PreferredLanguageSettingProps {
 }
 
 const PreferredLanguageSetting: React.FC<PreferredLanguageSettingProps> = ({ chatSettings, setChatSettings }) => {
+	const { t, isRtl } = useTranslation();
+
 	return (
-		<div style={{ marginTop: 10, marginBottom: 10 }}>
+		<div style={{ marginTop: 10, marginBottom: 10 }} className={isRtl ? 'rtl' : ''}>
 			<label htmlFor="preferred-language-dropdown" className="block mb-1 text-sm font-medium">
-				Preferred Language
+				{t("settings.preferredLanguage")}
 			</label>
 			<VSCodeDropdown
 				id="preferred-language-dropdown"
@@ -44,7 +47,7 @@ const PreferredLanguageSetting: React.FC<PreferredLanguageSettingProps> = ({ cha
 				<VSCodeOption value="Turkish - Türkçe">Turkish - Türkçe</VSCodeOption>
 			</VSCodeDropdown>
 			<p className="text-xs text-[var(--vscode-descriptionForeground)] mt-1">
-				The language that Cline should use for communication.
+				{t("settings.preferredLanguageDescription") || "The language that Cline should use for communication."}
 			</p>
 		</div>
 	)

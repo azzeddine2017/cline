@@ -7,8 +7,10 @@ import { VSCodeButton } from "@vscode/webview-ui-toolkit/react"
 import RulesToggleList from "./RulesToggleList"
 import Tooltip from "@/components/common/Tooltip"
 import styled from "styled-components"
+import { useTranslation } from "@/context/TranslationContext"
 
 const ClineRulesToggleModal: React.FC = () => {
+	const { t, isRtl } = useTranslation();
 	const {
 		globalClineRulesToggles = {},
 		localClineRulesToggles = {},
@@ -106,10 +108,10 @@ const ClineRulesToggleModal: React.FC = () => {
 	return (
 		<div ref={modalRef}>
 			<div ref={buttonRef} className="inline-flex min-w-0 max-w-full">
-				<Tooltip tipText="Manage Cline Rules & Workflows" visible={isVisible ? false : undefined}>
+				<Tooltip tipText={t("rules.title")} visible={isVisible ? false : undefined}>
 					<VSCodeButton
 						appearance="icon"
-						aria-label="Cline Rules"
+						aria-label={t("rules.title")}
 						onClick={() => setIsVisible(!isVisible)}
 						style={{ padding: "0px 0px", height: "20px" }}>
 						<div className="flex items-center gap-1 text-xs whitespace-nowrap min-w-0 w-full">
@@ -154,7 +156,7 @@ const ClineRulesToggleModal: React.FC = () => {
 								borderBottom: "1px solid var(--vscode-panel-border)",
 							}}>
 							<TabButton isActive={currentView === "rules"} onClick={() => setCurrentView("rules")}>
-								Rules
+								{t("rules.title")}
 							</TabButton>
 							<TabButton isActive={currentView === "workflows"} onClick={() => setCurrentView("workflows")}>
 								Workflows
@@ -166,15 +168,14 @@ const ClineRulesToggleModal: React.FC = () => {
 					<div className="text-xs text-[var(--vscode-descriptionForeground)] mb-4">
 						{currentView === "rules" ? (
 							<p>
-								Rules allow you to provide Cline with system-level guidance. Think of them as a persistent way to
-								include context and preferences for your projects or globally for every conversation.
+								{t("rules.description")}
 							</p>
 						) : (
 							<p>
 								Workflows allow you to define a series of steps to guide Cline through a repetitive set of tasks,
 								such as deploying a service or submitting a PR. To invoke a workflow, type{" "}
 								<span
-									className=" 
+									className="
 								text-[var(--vscode-foreground)] font-bold">
 									/workflow-name
 								</span>{" "}
@@ -187,7 +188,7 @@ const ClineRulesToggleModal: React.FC = () => {
 						<>
 							{/* Global Rules Section */}
 							<div className="mb-3">
-								<div className="text-sm font-normal mb-2">Global Rules</div>
+								<div className="text-sm font-normal mb-2">Global {t("rules.title")}</div>
 								<RulesToggleList
 									rules={globalRules}
 									toggleRule={(rulePath, enabled) => toggleRule(true, rulePath, enabled)}
@@ -201,7 +202,7 @@ const ClineRulesToggleModal: React.FC = () => {
 
 							{/* Local Rules Section */}
 							<div style={{ marginBottom: -10 }}>
-								<div className="text-sm font-normal mb-2">Workspace Rules</div>
+								<div className="text-sm font-normal mb-2">Workspace {t("rules.title")}</div>
 								<RulesToggleList
 									rules={localRules}
 									toggleRule={(rulePath, enabled) => toggleRule(false, rulePath, enabled)}

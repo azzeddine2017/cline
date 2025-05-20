@@ -22,6 +22,7 @@ import FeatureSettingsSection from "./FeatureSettingsSection"
 import BrowserSettingsSection from "./BrowserSettingsSection"
 import TerminalSettingsSection from "./TerminalSettingsSection"
 import { FEATURE_FLAGS } from "@shared/services/feature-flags/feature-flags"
+import { useTranslation } from "@/context/TranslationContext"
 const { IS_DEV } = process.env
 
 type SettingsViewProps = {
@@ -29,6 +30,7 @@ type SettingsViewProps = {
 }
 
 const SettingsView = ({ onDone }: SettingsViewProps) => {
+	const { t, isRtl } = useTranslation();
 	const {
 		apiConfiguration,
 		version,
@@ -98,11 +100,11 @@ const SettingsView = ({ onDone }: SettingsViewProps) => {
 
 	// validate as soon as the component is mounted
 	/*
-	useEffect will use stale values of variables if they are not included in the dependency array. 
-	so trying to use useEffect with a dependency array of only one value for example will use any 
-	other variables' old values. In most cases you don't want this, and should opt to use react-use 
+	useEffect will use stale values of variables if they are not included in the dependency array.
+	so trying to use useEffect with a dependency array of only one value for example will use any
+	other variables' old values. In most cases you don't want this, and should opt to use react-use
 	hooks.
-    
+
 		// uses someVar and anotherVar
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [someVar])
@@ -166,10 +168,10 @@ const SettingsView = ({ onDone }: SettingsViewProps) => {
 	}
 
 	return (
-		<div className="fixed top-0 left-0 right-0 bottom-0 pt-[10px] pr-0 pb-0 pl-5 flex flex-col overflow-hidden">
+		<div className={`fixed top-0 left-0 right-0 bottom-0 pt-[10px] pr-0 pb-0 pl-5 flex flex-col overflow-hidden ${isRtl ? 'rtl' : ''}`}>
 			<div className="flex justify-between items-center mb-[13px] pr-[17px]">
-				<h3 className="text-[var(--vscode-foreground)] m-0">Settings</h3>
-				<VSCodeButton onClick={() => handleSubmit(false)}>Save</VSCodeButton>
+				<h3 className="text-[var(--vscode-foreground)] m-0">{t("settings.title")}</h3>
+				<VSCodeButton onClick={() => handleSubmit(false)}>{t("settings.save")}</VSCodeButton>
 			</div>
 			<div className="grow overflow-y-scroll pr-2 flex flex-col">
 				{/* Tabs container */}
@@ -177,10 +179,10 @@ const SettingsView = ({ onDone }: SettingsViewProps) => {
 					<div className="border border-solid border-[var(--vscode-panel-border)] rounded-md p-[10px] mb-5 bg-[var(--vscode-panel-background)]">
 						<div className="flex gap-[1px] mb-[10px] -mt-2 border-0 border-b border-solid border-[var(--vscode-panel-border)]">
 							<TabButton isActive={chatSettings.mode === "plan"} onClick={() => handleTabChange("plan")}>
-								Plan Mode
+								{t("common.planMode")}
 							</TabButton>
 							<TabButton isActive={chatSettings.mode === "act"} onClick={() => handleTabChange("act")}>
-								Act Mode
+								{t("common.actMode")}
 							</TabButton>
 						</div>
 
@@ -209,12 +211,12 @@ const SettingsView = ({ onDone }: SettingsViewProps) => {
 						className="w-full"
 						resize="vertical"
 						rows={4}
-						placeholder={'e.g. "Run unit tests at the end", "Use TypeScript with async/await", "Speak in Spanish"'}
+						placeholder={t("common.customInstructionsPlaceholder")}
 						onInput={(e: any) => setCustomInstructions(e.target?.value ?? "")}>
-						<span className="font-medium">Custom Instructions</span>
+						<span className="font-medium">{t("common.customInstructions")}</span>
 					</VSCodeTextArea>
 					<p className="text-xs mt-[5px] text-[var(--vscode-descriptionForeground)]">
-						These instructions are added to the end of the system prompt sent with every request.
+						{t("common.customInstructionsDescription")}
 					</p>
 				</div>
 
@@ -228,11 +230,10 @@ const SettingsView = ({ onDone }: SettingsViewProps) => {
 							const checked = e.target.checked === true
 							setPlanActSeparateModelsSetting(checked)
 						}}>
-						Use different models for Plan and Act modes
+						{t("common.separateModels")}
 					</VSCodeCheckbox>
 					<p className="text-xs mt-[5px] text-[var(--vscode-descriptionForeground)]">
-						Switching between Plan and Act mode will persist the API and model used in the previous mode. This may be
-						helpful e.g. when using a strong reasoning model to architect a plan for a cheaper coding model to act on.
+						{t("common.separateModelsDescription")}
 					</p>
 				</div>
 
@@ -244,11 +245,10 @@ const SettingsView = ({ onDone }: SettingsViewProps) => {
 							const checked = e.target.checked === true
 							setTelemetrySetting(checked ? "enabled" : "disabled")
 						}}>
-						Allow anonymous error and usage reporting
+						{t("common.telemetry")}
 					</VSCodeCheckbox>
 					<p className="text-xs mt-[5px] text-[var(--vscode-descriptionForeground)]">
-						Help improve Cline by sending anonymous usage data and error reports. No code, prompts, or personal
-						information are ever sent. See our{" "}
+						{t("common.telemetryDescription")} See our{" "}
 						<VSCodeLink href="https://docs.cline.bot/more-info/telemetry" className="text-inherit">
 							telemetry overview
 						</VSCodeLink>{" "}

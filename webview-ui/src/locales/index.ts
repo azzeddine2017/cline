@@ -11,13 +11,14 @@ export const translations = {
 // Define the type for translation keys based on the English translations
 export type TranslationKey = keyof typeof en;
 
+// Define the supported languages
+export type SupportedLanguageKey = 'en' | 'ar';
+
 // Get a translation for a specific key and language
 export function getTranslation(key: TranslationKey, language: LanguageKey = 'en'): string {
-  // If the language is not supported, fall back to English
-  if (!translations[language]) {
-    return translations.en[key] || key;
-  }
-  
+  // Convert language to supported language or fall back to English
+  const supportedLang = (language in translations) ? language as SupportedLanguageKey : 'en';
+
   // If the key doesn't exist in the specified language, fall back to English
-  return translations[language][key] || translations.en[key] || key;
+  return translations[supportedLang][key] || translations.en[key] || key;
 }

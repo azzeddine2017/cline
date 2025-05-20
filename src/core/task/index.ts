@@ -65,7 +65,7 @@ import { constructNewFileContent } from "@core/assistant-message/diff"
 import { ClineIgnoreController } from "@core/ignore/ClineIgnoreController"
 import { parseMentions } from "@core/mentions"
 import { formatResponse } from "@core/prompts/responses"
-import { addUserInstructions, SYSTEM_PROMPT } from "@core/prompts/system"
+import { addUserInstructions, addUserInstructionsAR, SYSTEM_PROMPT, SYSTEM_PROMPT_AR } from "@core/prompts/system"
 import { getContextWindowInfo } from "@core/context/context-management/context-window-utils"
 import { FileContextTracker } from "@core/context/context-tracking/FileContextTracker"
 import { ModelContextTracker } from "@core/context/context-tracking/ModelContextTracker"
@@ -1555,7 +1555,10 @@ export class Task {
 
 		const supportsBrowserUse = modelSupportsBrowserUse && !disableBrowserTool // only enable browser use if the model supports it and the user hasn't disabled it
 
-		let systemPrompt = await SYSTEM_PROMPT(cwd, supportsBrowserUse, this.mcpHub, this.browserSettings)
+		// Use Arabic system prompt if preferred language is Arabic
+		let systemPrompt = this.chatSettings.preferredLanguage === "Arabic"
+			? await SYSTEM_PROMPT_AR(cwd, supportsBrowserUse, this.mcpHub, this.browserSettings)
+			: await SYSTEM_PROMPT(cwd, supportsBrowserUse, this.mcpHub, this.browserSettings)
 
 		let settingsCustomInstructions = this.customInstructions?.trim()
 		await this.migratePreferredLanguageToolSetting()
@@ -1595,16 +1598,27 @@ export class Task {
 			preferredLanguageInstructions
 		) {
 			// altering the system prompt mid-task will break the prompt cache, but in the grand scheme this will not change often so it's better to not pollute user messages with it the way we have to with <potentially relevant details>
-			const userInstructions = addUserInstructions(
-				settingsCustomInstructions,
-				globalClineRulesFileInstructions,
-				localClineRulesFileInstructions,
-				localCursorRulesFileInstructions,
-				localCursorRulesDirInstructions,
-				localWindsurfRulesFileInstructions,
-				clineIgnoreInstructions,
-				preferredLanguageInstructions,
-			)
+			const userInstructions = this.chatSettings.preferredLanguage === "Arabic"
+				? addUserInstructionsAR(
+					settingsCustomInstructions,
+					globalClineRulesFileInstructions,
+					localClineRulesFileInstructions,
+					localCursorRulesFileInstructions,
+					localCursorRulesDirInstructions,
+					localWindsurfRulesFileInstructions,
+					clineIgnoreInstructions,
+					preferredLanguageInstructions,
+				)
+				: addUserInstructions(
+					settingsCustomInstructions,
+					globalClineRulesFileInstructions,
+					localClineRulesFileInstructions,
+					localCursorRulesFileInstructions,
+					localCursorRulesDirInstructions,
+					localWindsurfRulesFileInstructions,
+					clineIgnoreInstructions,
+					preferredLanguageInstructions,
+				)
 			systemPrompt += userInstructions
 		}
 		const contextManagementMetadata = await this.contextManager.getNewContextMessagesAndMetadata(
@@ -3665,7 +3679,7 @@ export class Task {
 		}
 
 		/*
-		Seeing out of bounds is fine, it means that the next too call is being built up and ready to add to assistantMessageContent to present. 
+		Seeing out of bounds is fine, it means that the next too call is being built up and ready to add to assistantMessageContent to present.
 		When you see the UI inactive during this, it means that a tool is breaking without presenting any UI. For example the write_to_file tool was breaking when relpath was undefined, and for invalid relpath it never presented UI.
 		*/
 		this.presentAssistantMessageLocked = false // this needs to be placed here, if not then calling this.presentAssistantMessage below would fail (sometimes) since it's locked
