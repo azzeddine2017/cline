@@ -9,10 +9,10 @@ interface PreferredLanguageSettingProps {
 }
 
 const PreferredLanguageSetting: React.FC<PreferredLanguageSettingProps> = ({ chatSettings, setChatSettings }) => {
-	const { t, isRtl } = useTranslation();
+	const { t, isRtl } = useTranslation()
 
 	return (
-		<div style={{ marginTop: 10, marginBottom: 10 }} className={isRtl ? 'rtl' : ''}>
+		<div style={{ marginTop: 10, marginBottom: 10 }} className={isRtl ? "rtl" : ""}>
 			<label htmlFor="preferred-language-dropdown" className="block mb-1 text-sm font-medium">
 				{t("settings.preferredLanguage")}
 			</label>

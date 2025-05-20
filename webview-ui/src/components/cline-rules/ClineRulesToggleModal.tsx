@@ -10,7 +10,7 @@ import styled from "styled-components"
 import { useTranslation } from "@/context/TranslationContext"
 
 const ClineRulesToggleModal: React.FC = () => {
-	const { t, isRtl } = useTranslation();
+	const { t, isRtl } = useTranslation()
 	const {
 		globalClineRulesToggles = {},
 		localClineRulesToggles = {},
@@ -167,9 +167,7 @@ const ClineRulesToggleModal: React.FC = () => {
 					{/* Description text */}
 					<div className="text-xs text-[var(--vscode-descriptionForeground)] mb-4">
 						{currentView === "rules" ? (
-							<p>
-								{t("rules.description")}
-							</p>
+							<p>{t("rules.description")}</p>
 						) : (
 							<p>
 								Workflows allow you to define a series of steps to guide Cline through a repetitive set of tasks,

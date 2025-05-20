@@ -30,7 +30,7 @@ type SettingsViewProps = {
 }
 
 const SettingsView = ({ onDone }: SettingsViewProps) => {
-	const { t, isRtl } = useTranslation();
+	const { t, isRtl } = useTranslation()
 	const {
 		apiConfiguration,
 		version,
@@ -168,7 +168,8 @@ const SettingsView = ({ onDone }: SettingsViewProps) => {
 	}
 
 	return (
-		<div className={`fixed top-0 left-0 right-0 bottom-0 pt-[10px] pr-0 pb-0 pl-5 flex flex-col overflow-hidden ${isRtl ? 'rtl' : ''}`}>
+		<div
+			className={`fixed top-0 left-0 right-0 bottom-0 pt-[10px] pr-0 pb-0 pl-5 flex flex-col overflow-hidden ${isRtl ? "rtl" : ""}`}>
 			<div className="flex justify-between items-center mb-[13px] pr-[17px]">
 				<h3 className="text-[var(--vscode-foreground)] m-0">{t("settings.title")}</h3>
 				<VSCodeButton onClick={() => handleSubmit(false)}>{t("settings.save")}</VSCodeButton>

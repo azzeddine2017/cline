@@ -32,15 +32,13 @@ const WelcomeView = memo(() => {
 	}, [apiConfiguration])
 
 	return (
-		<div className={`fixed inset-0 p-0 flex flex-col ${isRtl ? 'rtl' : ''}`}>
+		<div className={`fixed inset-0 p-0 flex flex-col ${isRtl ? "rtl" : ""}`}>
 			<div className="h-full px-5 overflow-auto">
 				<h2>{t("welcome.title")}</h2>
 				<div className="flex justify-center my-5">
 					<ClineLogoWhite className="size-16" />
 				</div>
-				<p>
-					{t("welcome.description")}
-				</p>
+				<p>{t("welcome.description")}</p>
 
 				<p className="text-[var(--vscode-descriptionForeground)]">
 					Sign up for an account to get started for free, or use an API key that provides access to models like Claude

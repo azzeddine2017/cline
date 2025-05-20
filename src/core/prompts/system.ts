@@ -3,7 +3,7 @@ import os from "os"
 import osName from "os-name"
 import { McpHub } from "@services/mcp/McpHub"
 import { BrowserSettings } from "@shared/BrowserSettings"
-import { SYSTEM_PROMPT_AR } from "./system.ar"
+import { SYSTEM_PROMPT_AR } from "@core/prompts/system.ar"
 
 export const SYSTEM_PROMPT = async (
 	cwd: string,
