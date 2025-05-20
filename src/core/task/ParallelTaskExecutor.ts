@@ -23,11 +23,7 @@ export class ParallelTaskExecutor {
 	 * @param maxConcurrentTasks الحد الأقصى للمهام المتزامنة (اختياري)
 	 * @param retryConfig إعدادات إعادة المحاولة (اختياري)
 	 */
-	constructor(
-		taskManager: TaskManager,
-		maxConcurrentTasks?: number,
-		retryConfig?: Partial<RetryConfig>
-	) {
+	constructor(taskManager: TaskManager, maxConcurrentTasks?: number, retryConfig?: Partial<RetryConfig>) {
 		this.taskManager = taskManager
 
 		if (maxConcurrentTasks && maxConcurrentTasks > 0) {
@@ -45,7 +41,7 @@ export class ParallelTaskExecutor {
 	 */
 	setEnabled(enabled: boolean): void {
 		this.enabled = enabled
-		console.log(`Parallel task executor ${enabled ? 'enabled' : 'disabled'}`)
+		console.log(`Parallel task executor ${enabled ? "enabled" : "disabled"}`)
 	}
 
 	/**
@@ -86,7 +82,7 @@ export class ParallelTaskExecutor {
 	 */
 	queueTask(task: SubtaskDefinition, priority?: number): string {
 		// استخدام الأولوية المحددة أو الأولوية الافتراضية (0)
-		const taskPriority = priority !== undefined ? priority : (task.priority || 0)
+		const taskPriority = priority !== undefined ? priority : task.priority || 0
 
 		// إنشاء مهمة ذات أولوية
 		const prioritizedTask: PrioritizedTask = {
@@ -175,7 +171,7 @@ export class ParallelTaskExecutor {
 	async executeTasksInParallel(
 		mainTaskId: string,
 		subtasks: SubtaskDefinition[],
-		continueOnFailure: boolean = false
+		continueOnFailure: boolean = false,
 	): Promise<ParallelExecutionResult> {
 		// التحقق من تفعيل منفذ المهام المتوازي
 		if (!this.enabled) {
@@ -255,7 +251,7 @@ export class ParallelTaskExecutor {
 				totalTime,
 				averageTaskTime,
 				totalRetries,
-			}
+			},
 		}
 	}
 
@@ -317,7 +313,7 @@ export class ParallelTaskExecutor {
 				}
 
 				// انتظار قبل إعادة المحاولة
-				await new Promise(resolve => setTimeout(resolve, delay))
+				await new Promise((resolve) => setTimeout(resolve, delay))
 
 				// إعادة المحاولة
 				return this.executeSubtask(subtask, retryCount + 1)
@@ -380,7 +376,9 @@ export class ParallelTaskExecutor {
 						failedTasks.push(task.id)
 						console.log(`Task ${task.id} failed after ${result.retries || 0} retries`)
 					} else {
-						console.log(`Task ${task.id} completed successfully${result.retries ? ` after ${result.retries} retries` : ""}`)
+						console.log(
+							`Task ${task.id} completed successfully${result.retries ? ` after ${result.retries} retries` : ""}`,
+						)
 					}
 				} catch (error) {
 					// في حالة حدوث خطأ غير متوقع
@@ -616,7 +614,7 @@ export class ParallelTaskExecutor {
 	private async executeTasksSequentially(
 		mainTaskId: string,
 		subtasks: SubtaskDefinition[],
-		continueOnFailure: boolean = false
+		continueOnFailure: boolean = false,
 	): Promise<ParallelExecutionResult> {
 		// تسجيل وقت البدء
 		const startTime = Date.now()
@@ -660,7 +658,9 @@ export class ParallelTaskExecutor {
 						break
 					}
 				} else {
-					console.log(`Task ${task.id} completed successfully${result.retries ? ` after ${result.retries} retries` : ""}`)
+					console.log(
+						`Task ${task.id} completed successfully${result.retries ? ` after ${result.retries} retries` : ""}`,
+					)
 				}
 			} catch (error) {
 				// في حالة حدوث خطأ غير متوقع
@@ -717,7 +717,7 @@ export class ParallelTaskExecutor {
 				totalTime,
 				averageTaskTime,
 				totalRetries,
-			}
+			},
 		}
 	}
 

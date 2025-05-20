@@ -126,7 +126,8 @@ export const en = {
 	// Advanced Systems Settings
 	"settings.advancedSystems.title": "Advanced Systems",
 	"settings.advancedSystems.enable": "Enable Advanced Systems",
-	"settings.advancedSystems.enableDescription": "Enables advanced systems for code analysis, learning, memory, and parallel task execution.",
+	"settings.advancedSystems.enableDescription":
+		"Enables advanced systems for code analysis, learning, memory, and parallel task execution.",
 	"settings.advancedSystems.enableCodeAnalyzer": "Enable Code Analyzer",
 	"settings.advancedSystems.enableCodeAnalyzerDescription": "Analyzes your code to provide better suggestions and insights.",
 	"settings.advancedSystems.enableLearningSystem": "Enable Learning System",
@@ -134,9 +135,10 @@ export const en = {
 	"settings.advancedSystems.enableMemorySystem": "Enable Memory System",
 	"settings.advancedSystems.enableMemorySystemDescription": "Remembers concepts, patterns, and preferences across sessions.",
 	"settings.advancedSystems.enableParallelTaskExecutor": "Enable Parallel Task Executor",
-	"settings.advancedSystems.enableParallelTaskExecutorDescription": "Executes multiple tasks in parallel for better performance.",
+	"settings.advancedSystems.enableParallelTaskExecutorDescription":
+		"Executes multiple tasks in parallel for better performance.",
 	"settings.advancedSystems.maxConcurrentTasks": "Maximum Concurrent Tasks",
 	"settings.advancedSystems.maxConcurrentTasksDescription": "Maximum number of tasks that can be executed in parallel.",
 	"settings.advancedSystems.maxRetries": "Maximum Retries",
-	"settings.advancedSystems.maxRetriesDescription": "Maximum number of retries for failed tasks."
+	"settings.advancedSystems.maxRetriesDescription": "Maximum number of retries for failed tasks.",
 }

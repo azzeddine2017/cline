@@ -209,7 +209,8 @@ export class Controller {
 
 				// تحليل المهمة لاستخراج معلومات مفيدة
 				const taskLowerCase = task.toLowerCase()
-				const isCodeRelated = taskLowerCase.includes("code") ||
+				const isCodeRelated =
+					taskLowerCase.includes("code") ||
 					taskLowerCase.includes("file") ||
 					taskLowerCase.includes("project") ||
 					taskLowerCase.includes("function") ||
@@ -262,7 +263,8 @@ export class Controller {
 	 */
 	private extractConcepts(task: string): string[] {
 		// تنظيف النص
-		const cleanTask = task.toLowerCase()
+		const cleanTask = task
+			.toLowerCase()
 			.replace(/[^\w\s]/g, " ")
 			.replace(/\s+/g, " ")
 			.trim()
@@ -272,20 +274,83 @@ export class Controller {
 
 		// إزالة الكلمات الشائعة
 		const commonWords = [
-			"a", "an", "the", "in", "on", "at", "to", "for", "with", "by", "about",
-			"like", "through", "over", "before", "between", "after", "since", "without",
-			"under", "within", "along", "following", "across", "behind", "beyond",
-			"plus", "except", "but", "up", "out", "around", "down", "off", "above", "near",
-			"and", "or", "if", "then", "else", "when", "where", "how", "what", "why", "who",
-			"please", "can", "could", "would", "should", "may", "might", "must", "need",
-			"help", "create", "make", "do", "implement", "build", "develop", "write", "code",
-			"add", "update", "change", "modify", "fix", "solve", "resolve", "improve",
+			"a",
+			"an",
+			"the",
+			"in",
+			"on",
+			"at",
+			"to",
+			"for",
+			"with",
+			"by",
+			"about",
+			"like",
+			"through",
+			"over",
+			"before",
+			"between",
+			"after",
+			"since",
+			"without",
+			"under",
+			"within",
+			"along",
+			"following",
+			"across",
+			"behind",
+			"beyond",
+			"plus",
+			"except",
+			"but",
+			"up",
+			"out",
+			"around",
+			"down",
+			"off",
+			"above",
+			"near",
+			"and",
+			"or",
+			"if",
+			"then",
+			"else",
+			"when",
+			"where",
+			"how",
+			"what",
+			"why",
+			"who",
+			"please",
+			"can",
+			"could",
+			"would",
+			"should",
+			"may",
+			"might",
+			"must",
+			"need",
+			"help",
+			"create",
+			"make",
+			"do",
+			"implement",
+			"build",
+			"develop",
+			"write",
+			"code",
+			"add",
+			"update",
+			"change",
+			"modify",
+			"fix",
+			"solve",
+			"resolve",
+			"improve",
 		]
 
 		// فلترة الكلمات الشائعة والكلمات القصيرة
-		const filteredWords = words.filter(word =>
-			!commonWords.includes(word) && word.length > 3
-		)
+		const filteredWords = words.filter((word) => !commonWords.includes(word) && word.length > 3)
 
 		// استخراج المفاهيم (الكلمات المتبقية)
 		const concepts = new Set<string>()
@@ -1718,7 +1783,7 @@ export class Controller {
 
 			// الحصول على المهمة من التاريخ
 			const history = ((await getGlobalState(this.context, "taskHistory")) as HistoryItem[]) || []
-			const taskItem = history.find(item => item.id === taskId)
+			const taskItem = history.find((item) => item.id === taskId)
 
 			if (!taskItem || !taskItem.task) {
 				console.warn(`Task ${taskId} not found in history`)
@@ -1776,7 +1841,11 @@ export class Controller {
 				if (feedbackDetails) {
 					// تحليل التفاصيل لفهم ما لم يعجب المستخدم
 					if (feedbackDetails.includes("format") || feedbackDetails.includes("style")) {
-						await advancedSystem.learnUserPreference("code_style", "not_" + this.extractConcepts(feedbackDetails)[0], feedbackDetails)
+						await advancedSystem.learnUserPreference(
+							"code_style",
+							"not_" + this.extractConcepts(feedbackDetails)[0],
+							feedbackDetails,
+						)
 					}
 
 					if (feedbackDetails.includes("explain") || feedbackDetails.includes("detail")) {

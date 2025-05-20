@@ -137,5 +137,5 @@ export const ar = {
 	"settings.advancedSystems.maxConcurrentTasks": "الحد الأقصى للمهام المتزامنة",
 	"settings.advancedSystems.maxConcurrentTasksDescription": "الحد الأقصى لعدد المهام التي يمكن تنفيذها بالتوازي.",
 	"settings.advancedSystems.maxRetries": "الحد الأقصى لعدد مرات إعادة المحاولة",
-	"settings.advancedSystems.maxRetriesDescription": "الحد الأقصى لعدد مرات إعادة المحاولة للمهام الفاشلة."
+	"settings.advancedSystems.maxRetriesDescription": "الحد الأقصى لعدد مرات إعادة المحاولة للمهام الفاشلة.",
 }

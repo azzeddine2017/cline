@@ -19,7 +19,7 @@ export class AdvancedCodeAnalyzer {
 	 */
 	setEnabled(enabled: boolean): void {
 		this.enabled = enabled
-		console.log(`Code analyzer ${enabled ? 'enabled' : 'disabled'}`)
+		console.log(`Code analyzer ${enabled ? "enabled" : "disabled"}`)
 	}
 
 	/**
@@ -609,7 +609,7 @@ export class AdvancedCodeAnalyzer {
 
 		// تجاهل التعليقات
 		const lines = text.split("\n")
-		const nonCommentLines = lines.filter(line => {
+		const nonCommentLines = lines.filter((line) => {
 			const trimmedLine = line.trim()
 			return !(
 				trimmedLine.startsWith("//") ||
@@ -949,11 +949,7 @@ export class CodePatternDetector {
 	 * @param fileType نوع الملف
 	 * @returns الأنماط المكتشفة
 	 */
-	private async detectFileSpecificPatterns(
-		filePath: string,
-		content: string,
-		fileType: string
-	): Promise<DetectedPattern[]> {
+	private async detectFileSpecificPatterns(filePath: string, content: string, fileType: string): Promise<DetectedPattern[]> {
 		const patterns: DetectedPattern[] = []
 
 		// أنماط خاصة بـ React
@@ -1160,7 +1156,7 @@ export class SemanticAnalyzer {
 			const fileEntities = Array.from(this.entities.values()).filter((entity) => entity.location === filePath)
 			const fileRelationships = Array.from(this.relationships.values()).filter(
 				(rel) =>
-					this.entities.get(rel.source)?.location === filePath || this.entities.get(rel.target)?.location === filePath
+					this.entities.get(rel.source)?.location === filePath || this.entities.get(rel.target)?.location === filePath,
 			)
 
 			return {

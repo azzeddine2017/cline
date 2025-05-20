@@ -27,7 +27,7 @@ export class SelfLearningSystem {
 	 */
 	setEnabled(enabled: boolean): void {
 		this.enabled = enabled
-		console.log(`Self learning system ${enabled ? 'enabled' : 'disabled'}`)
+		console.log(`Self learning system ${enabled ? "enabled" : "disabled"}`)
 	}
 
 	/**
@@ -126,7 +126,7 @@ export class SelfLearningSystem {
 								domain: contextInfo.domain,
 								language: contextInfo.language,
 								complexity: contextInfo.complexity,
-							}
+							},
 						})
 
 						taskWithSetContext.setTaskContext(learningContext)
@@ -141,7 +141,7 @@ export class SelfLearningSystem {
 					"patterns and",
 					enhancedPreferences.size,
 					"preferences",
-					`(domain: ${contextInfo.domain}, language: ${contextInfo.language})`
+					`(domain: ${contextInfo.domain}, language: ${contextInfo.language})`,
 				)
 			} else {
 				console.warn("Task does not support applyLearning method")
@@ -199,7 +199,7 @@ export class SelfLearningSystem {
 
 		// تحليل المجال
 		for (const [domain, patterns] of Object.entries(domainPatterns)) {
-			if (patterns.some(pattern => context.toLowerCase().includes(pattern))) {
+			if (patterns.some((pattern) => context.toLowerCase().includes(pattern))) {
 				contextInfo.domain = domain
 				break
 			}
@@ -207,7 +207,7 @@ export class SelfLearningSystem {
 
 		// تحليل اللغة
 		for (const [language, patterns] of Object.entries(languagePatterns)) {
-			if (patterns.some(pattern => context.toLowerCase().includes(pattern))) {
+			if (patterns.some((pattern) => context.toLowerCase().includes(pattern))) {
 				contextInfo.language = language
 				break
 			}
@@ -215,7 +215,7 @@ export class SelfLearningSystem {
 
 		// تحليل التعقيد
 		for (const [complexity, patterns] of Object.entries(complexityPatterns)) {
-			if (patterns.some(pattern => context.toLowerCase().includes(pattern))) {
+			if (patterns.some((pattern) => context.toLowerCase().includes(pattern))) {
 				contextInfo.complexity = complexity
 				break
 			}
@@ -233,10 +233,7 @@ export class SelfLearningSystem {
 	 * @param contextInfo معلومات السياق
 	 * @returns التفضيلات المحسنة
 	 */
-	private enhancePreferences(
-		preferences: Map<string, string>,
-		contextInfo: ContextInfo
-	): Map<string, string> {
+	private enhancePreferences(preferences: Map<string, string>, contextInfo: ContextInfo): Map<string, string> {
 		// نسخ التفضيلات الأصلية
 		const enhancedPreferences = new Map(preferences)
 
@@ -511,17 +508,57 @@ export class PatternLearner {
 
 		// إزالة الكلمات الشائعة
 		const commonWords = [
-			"a", "an", "the", "in", "on", "at", "to", "for", "with", "by", "about",
-			"like", "through", "over", "before", "between", "after", "since", "without",
-			"under", "within", "along", "following", "across", "behind", "beyond",
-			"plus", "except", "but", "up", "out", "around", "down", "off", "above", "near",
-			"and", "or", "if", "then", "else", "when", "where", "how", "what", "why", "who",
+			"a",
+			"an",
+			"the",
+			"in",
+			"on",
+			"at",
+			"to",
+			"for",
+			"with",
+			"by",
+			"about",
+			"like",
+			"through",
+			"over",
+			"before",
+			"between",
+			"after",
+			"since",
+			"without",
+			"under",
+			"within",
+			"along",
+			"following",
+			"across",
+			"behind",
+			"beyond",
+			"plus",
+			"except",
+			"but",
+			"up",
+			"out",
+			"around",
+			"down",
+			"off",
+			"above",
+			"near",
+			"and",
+			"or",
+			"if",
+			"then",
+			"else",
+			"when",
+			"where",
+			"how",
+			"what",
+			"why",
+			"who",
 		]
 
 		// فلترة الكلمات الشائعة والكلمات القصيرة
-		const filteredWords = words.filter(word =>
-			!commonWords.includes(word) && word.length > 2
-		)
+		const filteredWords = words.filter((word) => !commonWords.includes(word) && word.length > 2)
 
 		// إرجاع الكلمات المفتاحية (الحد الأقصى)
 		return filteredWords.slice(0, maxKeywords)
@@ -558,9 +595,7 @@ export class PatternLearner {
 		}
 
 		// حساب درجة التشابه
-		const similarity = patternContextKeywords.length > 0
-			? matchCount / patternContextKeywords.length
-			: 0
+		const similarity = patternContextKeywords.length > 0 ? matchCount / patternContextKeywords.length : 0
 
 		// اعتبار النمط ذو صلة إذا كانت درجة التشابه أكبر من 0.3
 		return similarity > 0.3
@@ -669,49 +704,233 @@ export class PreferenceLearner {
 		// تحديد الفئات المختلفة للتفضيلات مع كلمات مفتاحية أكثر تفصيلاً
 		const categories = {
 			code_style: [
-				"format", "style", "indent", "spacing", "naming", "convention", "tabs", "spaces",
-				"bracket", "brace", "semicolon", "camelcase", "snake_case", "kebab-case", "pascal",
-				"lint", "prettier", "eslint", "format", "clean", "readable", "consistency"
+				"format",
+				"style",
+				"indent",
+				"spacing",
+				"naming",
+				"convention",
+				"tabs",
+				"spaces",
+				"bracket",
+				"brace",
+				"semicolon",
+				"camelcase",
+				"snake_case",
+				"kebab-case",
+				"pascal",
+				"lint",
+				"prettier",
+				"eslint",
+				"format",
+				"clean",
+				"readable",
+				"consistency",
 			],
 			ui_preference: [
-				"ui", "interface", "color", "theme", "layout", "display", "dark", "light", "contrast",
-				"font", "size", "zoom", "panel", "sidebar", "toolbar", "menu", "icon", "button",
-				"window", "split", "view", "screen", "resolution", "visibility", "hide", "show"
+				"ui",
+				"interface",
+				"color",
+				"theme",
+				"layout",
+				"display",
+				"dark",
+				"light",
+				"contrast",
+				"font",
+				"size",
+				"zoom",
+				"panel",
+				"sidebar",
+				"toolbar",
+				"menu",
+				"icon",
+				"button",
+				"window",
+				"split",
+				"view",
+				"screen",
+				"resolution",
+				"visibility",
+				"hide",
+				"show",
 			],
 			language_preference: [
-				"language", "typescript", "javascript", "python", "java", "c#", "go", "rust", "ruby",
-				"php", "html", "css", "sql", "bash", "shell", "powershell", "markdown", "json", "yaml",
-				"xml", "framework", "library", "package", "module", "import", "syntax", "compiler"
+				"language",
+				"typescript",
+				"javascript",
+				"python",
+				"java",
+				"c#",
+				"go",
+				"rust",
+				"ruby",
+				"php",
+				"html",
+				"css",
+				"sql",
+				"bash",
+				"shell",
+				"powershell",
+				"markdown",
+				"json",
+				"yaml",
+				"xml",
+				"framework",
+				"library",
+				"package",
+				"module",
+				"import",
+				"syntax",
+				"compiler",
 			],
 			communication_style: [
-				"verbose", "concise", "detailed", "brief", "explain", "comment", "documentation",
-				"clarity", "simple", "complex", "technical", "beginner", "advanced", "step-by-step",
-				"overview", "summary", "comprehensive", "thorough", "quick", "fast", "slow", "careful"
+				"verbose",
+				"concise",
+				"detailed",
+				"brief",
+				"explain",
+				"comment",
+				"documentation",
+				"clarity",
+				"simple",
+				"complex",
+				"technical",
+				"beginner",
+				"advanced",
+				"step-by-step",
+				"overview",
+				"summary",
+				"comprehensive",
+				"thorough",
+				"quick",
+				"fast",
+				"slow",
+				"careful",
 			],
 			workflow: [
-				"workflow", "process", "steps", "approach", "method", "technique", "strategy",
-				"planning", "design", "implementation", "testing", "debugging", "refactoring",
-				"review", "collaboration", "solo", "team", "agile", "waterfall", "sprint", "milestone"
+				"workflow",
+				"process",
+				"steps",
+				"approach",
+				"method",
+				"technique",
+				"strategy",
+				"planning",
+				"design",
+				"implementation",
+				"testing",
+				"debugging",
+				"refactoring",
+				"review",
+				"collaboration",
+				"solo",
+				"team",
+				"agile",
+				"waterfall",
+				"sprint",
+				"milestone",
 			],
 			tool_preference: [
-				"tool", "editor", "ide", "terminal", "command", "git", "vscode", "intellij", "sublime",
-				"atom", "vim", "emacs", "notepad", "browser", "chrome", "firefox", "edge", "safari",
-				"extension", "plugin", "addon", "feature", "shortcut", "hotkey", "keyboard", "mouse"
+				"tool",
+				"editor",
+				"ide",
+				"terminal",
+				"command",
+				"git",
+				"vscode",
+				"intellij",
+				"sublime",
+				"atom",
+				"vim",
+				"emacs",
+				"notepad",
+				"browser",
+				"chrome",
+				"firefox",
+				"edge",
+				"safari",
+				"extension",
+				"plugin",
+				"addon",
+				"feature",
+				"shortcut",
+				"hotkey",
+				"keyboard",
+				"mouse",
 			],
 			ai_interaction: [
-				"ai", "assistant", "bot", "help", "suggestion", "recommendation", "auto", "automatic",
-				"completion", "copilot", "intellisense", "hint", "prompt", "response", "answer",
-				"question", "query", "request", "instruction", "command", "directive", "guidance"
+				"ai",
+				"assistant",
+				"bot",
+				"help",
+				"suggestion",
+				"recommendation",
+				"auto",
+				"automatic",
+				"completion",
+				"copilot",
+				"intellisense",
+				"hint",
+				"prompt",
+				"response",
+				"answer",
+				"question",
+				"query",
+				"request",
+				"instruction",
+				"command",
+				"directive",
+				"guidance",
 			],
 			performance: [
-				"performance", "speed", "fast", "slow", "optimize", "efficient", "memory", "cpu",
-				"resource", "usage", "load", "time", "latency", "response", "quick", "delay", "lag",
-				"bottleneck", "profile", "benchmark", "measure", "metric", "improvement", "degradation"
+				"performance",
+				"speed",
+				"fast",
+				"slow",
+				"optimize",
+				"efficient",
+				"memory",
+				"cpu",
+				"resource",
+				"usage",
+				"load",
+				"time",
+				"latency",
+				"response",
+				"quick",
+				"delay",
+				"lag",
+				"bottleneck",
+				"profile",
+				"benchmark",
+				"measure",
+				"metric",
+				"improvement",
+				"degradation",
 			],
 			security: [
-				"security", "secure", "protection", "vulnerability", "risk", "threat", "attack",
-				"defense", "encrypt", "decrypt", "hash", "password", "authentication", "authorization",
-				"permission", "access", "control", "firewall", "sandbox", "isolation", "validation"
+				"security",
+				"secure",
+				"protection",
+				"vulnerability",
+				"risk",
+				"threat",
+				"attack",
+				"defense",
+				"encrypt",
+				"decrypt",
+				"hash",
+				"password",
+				"authentication",
+				"authorization",
+				"permission",
+				"access",
+				"control",
+				"firewall",
+				"sandbox",
+				"isolation",
+				"validation",
 			],
 		}
 
@@ -739,22 +958,35 @@ export class PreferenceLearner {
 
 		// إذا تم العثور على فئات متطابقة، اختر الفئة ذات الدرجة الأعلى
 		if (categoryScores.size > 0) {
-			const sortedCategories = Array.from(categoryScores.entries())
-				.sort((a, b) => b[1] - a[1])
+			const sortedCategories = Array.from(categoryScores.entries()).sort((a, b) => b[1] - a[1])
 
 			return sortedCategories[0][0]
 		}
 
 		// إذا لم يتم العثور على فئة محددة، استخدم تحليل أكثر تفصيلاً
 		// استخراج الكلمات المفتاحية من السياق
-		const contextWords = context.split(/\s+/)
-			.filter(word => word.length > 3)
-			.map(word => word.replace(/[^\w]/g, ""))
+		const contextWords = context
+			.split(/\s+/)
+			.filter((word) => word.length > 3)
+			.map((word) => word.replace(/[^\w]/g, ""))
 
 		// البحث عن كلمة مفتاحية ذات معنى
 		for (const word of contextWords) {
 			// تجاهل الكلمات الشائعة
-			const commonWords = ["this", "that", "with", "from", "have", "what", "when", "where", "which", "there", "their", "about"]
+			const commonWords = [
+				"this",
+				"that",
+				"with",
+				"from",
+				"have",
+				"what",
+				"when",
+				"where",
+				"which",
+				"there",
+				"their",
+				"about",
+			]
 			if (!commonWords.includes(word) && word.length > 3) {
 				return word
 			}

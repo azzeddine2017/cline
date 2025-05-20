@@ -24,7 +24,7 @@ export class SmartMemorySystem {
 	 */
 	setEnabled(enabled: boolean): void {
 		this.enabled = enabled
-		console.log(`Smart memory system ${enabled ? 'enabled' : 'disabled'}`)
+		console.log(`Smart memory system ${enabled ? "enabled" : "disabled"}`)
 	}
 
 	/**
@@ -96,12 +96,7 @@ export class SmartMemorySystem {
 	 * @param context سياق التفضيل (اختياري)
 	 * @param strength قوة التفضيل (0-1، اختياري)
 	 */
-	async learnUserPreference(
-		category: string,
-		preference: string,
-		context: string = "",
-		strength: number = 0.7
-	): Promise<void> {
+	async learnUserPreference(category: string, preference: string, context: string = "", strength: number = 0.7): Promise<void> {
 		// التحقق من تفعيل نظام الذاكرة
 		if (!this.enabled) {
 			console.log("Smart memory system is disabled. Skipping user preference learning.")
@@ -191,17 +186,20 @@ export class SmartMemorySystem {
 
 			// تحديث تفضيلات المستخدم المستخدمة في المهمة
 			// استخراج الكلمات المفتاحية من سياق المهمة
-			const keywords = taskContext.toLowerCase().split(/\s+/)
-				.filter(word => word.length > 2)
+			const keywords = taskContext
+				.toLowerCase()
+				.split(/\s+/)
+				.filter((word) => word.length > 2)
 				.slice(0, 10) // أخذ أهم 10 كلمات
 
 			// تحديث قوة التفضيلات ذات الصلة
 			for (const [category, preferences] of this.userPreferencesMemory.exportPreferences().entries()) {
 				for (const preference of preferences) {
 					// التحقق مما إذا كان التفضيل مستخدمًا في المهمة
-					const isUsed = keywords.some(keyword =>
-						preference.value.toLowerCase().includes(keyword) ||
-						(preference.context && preference.context.toLowerCase().includes(keyword))
+					const isUsed = keywords.some(
+						(keyword) =>
+							preference.value.toLowerCase().includes(keyword) ||
+							(preference.context && preference.context.toLowerCase().includes(keyword)),
 					)
 
 					if (isUsed) {
@@ -330,7 +328,7 @@ export class SmartMemorySystem {
 			}
 
 			// التحقق من وجود الكلمات المفتاحية في سياقات المفهوم
-			const conceptKeywords = concept.contexts.flatMap(c => this.extractKeywords(c))
+			const conceptKeywords = concept.contexts.flatMap((c) => this.extractKeywords(c))
 			for (const keyword of contextKeywords) {
 				if (conceptKeywords.includes(keyword) || concept.name.toLowerCase().includes(keyword)) {
 					relevanceScore += 0.1
@@ -361,10 +359,42 @@ export class SmartMemorySystem {
 
 		// إزالة الكلمات الشائعة
 		const commonWords = [
-			"a", "an", "the", "in", "on", "at", "to", "for", "with", "by", "about",
-			"like", "through", "over", "before", "between", "after", "since", "without",
-			"under", "within", "along", "following", "across", "behind", "beyond",
-			"plus", "except", "but", "up", "out", "around", "down", "off", "above", "near",
+			"a",
+			"an",
+			"the",
+			"in",
+			"on",
+			"at",
+			"to",
+			"for",
+			"with",
+			"by",
+			"about",
+			"like",
+			"through",
+			"over",
+			"before",
+			"between",
+			"after",
+			"since",
+			"without",
+			"under",
+			"within",
+			"along",
+			"following",
+			"across",
+			"behind",
+			"beyond",
+			"plus",
+			"except",
+			"but",
+			"up",
+			"out",
+			"around",
+			"down",
+			"off",
+			"above",
+			"near",
 		]
 
 		// إرجاع الكلمات المفتاحية (الكلمات غير الشائعة وطولها أكبر من 2)
@@ -403,7 +433,7 @@ export class SmartMemorySystem {
 			}
 
 			// التحقق من وجود الكلمات المفتاحية في أمثلة النمط
-			const patternKeywords = pattern.examples.flatMap(e => this.extractKeywords(e))
+			const patternKeywords = pattern.examples.flatMap((e) => this.extractKeywords(e))
 			for (const keyword of contextKeywords) {
 				if (patternKeywords.includes(keyword) || pattern.name.toLowerCase().includes(keyword)) {
 					relevanceScore += 0.1
@@ -586,10 +616,42 @@ export class UserPreferencesMemory {
 
 		// إزالة الكلمات الشائعة
 		const commonWords = [
-			"a", "an", "the", "in", "on", "at", "to", "for", "with", "by", "about",
-			"like", "through", "over", "before", "between", "after", "since", "without",
-			"under", "within", "along", "following", "across", "behind", "beyond",
-			"plus", "except", "but", "up", "out", "around", "down", "off", "above", "near",
+			"a",
+			"an",
+			"the",
+			"in",
+			"on",
+			"at",
+			"to",
+			"for",
+			"with",
+			"by",
+			"about",
+			"like",
+			"through",
+			"over",
+			"before",
+			"between",
+			"after",
+			"since",
+			"without",
+			"under",
+			"within",
+			"along",
+			"following",
+			"across",
+			"behind",
+			"beyond",
+			"plus",
+			"except",
+			"but",
+			"up",
+			"out",
+			"around",
+			"down",
+			"off",
+			"above",
+			"near",
 		]
 
 		// إرجاع الكلمات المفتاحية (الكلمات غير الشائعة وطولها أكبر من 2)
