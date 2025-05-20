@@ -1,18 +1,14 @@
 import {
 	VSCodeButton,
 	VSCodeCheckbox,
-	VSCodeDropdown,
 	VSCodeLink,
-	VSCodeOption,
 	VSCodeTextArea,
 } from "@vscode/webview-ui-toolkit/react"
 import { memo, useCallback, useEffect, useState } from "react"
 import PreferredLanguageSetting from "./PreferredLanguageSetting" // Added import
-import { OpenAIReasoningEffort } from "@shared/ChatSettings"
 import { useExtensionState } from "@/context/ExtensionStateContext"
 import { validateApiConfiguration, validateModelId } from "@/utils/validate"
 import { vscode } from "@/utils/vscode"
-import SettingsButton from "@/components/common/SettingsButton"
 import ApiOptions from "./ApiOptions"
 import { TabButton } from "../mcp/configuration/McpConfigurationView"
 import { useEvent } from "react-use"
@@ -21,7 +17,8 @@ import { StateServiceClient } from "@/services/grpc-client"
 import FeatureSettingsSection from "./FeatureSettingsSection"
 import BrowserSettingsSection from "./BrowserSettingsSection"
 import TerminalSettingsSection from "./TerminalSettingsSection"
-import { FEATURE_FLAGS } from "@shared/services/feature-flags/feature-flags"
+import AdvancedSystemsSection from "./AdvancedSystemsSection"
+// import { FEATURE_FLAGS } from "@shared/services/feature-flags/feature-flags"
 import { useTranslation } from "@/context/TranslationContext"
 const { IS_DEV } = process.env
 
@@ -268,6 +265,9 @@ const SettingsView = ({ onDone }: SettingsViewProps) => {
 
 				{/* Terminal Settings Section */}
 				<TerminalSettingsSection />
+
+				{/* Advanced Systems Section */}
+				<AdvancedSystemsSection />
 
 				{IS_DEV && (
 					<>

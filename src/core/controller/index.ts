@@ -201,26 +201,47 @@ export class Controller {
 			historyItem,
 		)
 
-		// تطبيق التعلم على المهمة الجديدة
+		// تطبيق الأنظمة المتقدمة على المهمة الجديدة
 		if (this.task && task) {
 			try {
 				// تعيين سياق المهمة
 				this.task.setTaskContext(task)
 
+				// تحليل المهمة لاستخراج معلومات مفيدة
+				const taskLowerCase = task.toLowerCase()
+				const isCodeRelated = taskLowerCase.includes("code") ||
+					taskLowerCase.includes("file") ||
+					taskLowerCase.includes("project") ||
+					taskLowerCase.includes("function") ||
+					taskLowerCase.includes("class") ||
+					taskLowerCase.includes("bug") ||
+					taskLowerCase.includes("fix") ||
+					taskLowerCase.includes("implement")
+
 				// تحليل الكود إذا كان ذلك مناسبًا
-				if (task.includes("code") || task.includes("file") || task.includes("project")) {
-					const codeAnalyzer = advancedSystem.getCodeAnalyzer()
-					const analysisResults = await codeAnalyzer.analyzeProject(cwd)
-					this.task.setAnalysisResults(analysisResults)
+				if (isCodeRelated) {
+					console.log("Task is code-related, analyzing project...")
+					try {
+						// استخدام واجهة النظام المتقدم بدلاً من الوصول المباشر إلى المكونات
+						const analysisResults = await advancedSystem.analyzeProject(cwd)
+						this.task.setAnalysisResults(analysisResults)
+						console.log("Project analysis completed and applied to task")
+
+						// تعلم مفاهيم جديدة من المهمة
+						const concepts = this.extractConcepts(task)
+						for (const concept of concepts) {
+							await advancedSystem.learnConcept(concept, task, 0.7)
+						}
+					} catch (error) {
+						console.warn("Error analyzing project:", error)
+					}
 				}
 
-				// تطبيق التعلم من النظام
-				const learningSystem = advancedSystem.getLearningSystem()
-				if (this.task) {
-					await learningSystem.applyLearning(this.task)
-				}
+				// تطبيق التعلم من النظام على المهمة
+				await advancedSystem.applyLearningToTask(this.task, task)
+				console.log("Applied learning to task")
 
-				console.log("Applied advanced systems to new task")
+				console.log("Advanced systems successfully applied to new task")
 			} catch (error) {
 				console.error("Error applying advanced systems to task:", error)
 			}
@@ -232,6 +253,56 @@ export class Controller {
 		if (history) {
 			await this.initTask(undefined, undefined, history.historyItem)
 		}
+	}
+
+	/**
+	 * استخراج المفاهيم من نص المهمة
+	 * @param task نص المهمة
+	 * @returns قائمة المفاهيم المستخرجة
+	 */
+	private extractConcepts(task: string): string[] {
+		// تنظيف النص
+		const cleanTask = task.toLowerCase()
+			.replace(/[^\w\s]/g, " ")
+			.replace(/\s+/g, " ")
+			.trim()
+
+		// تقسيم النص إلى كلمات
+		const words = cleanTask.split(" ")
+
+		// إزالة الكلمات الشائعة
+		const commonWords = [
+			"a", "an", "the", "in", "on", "at", "to", "for", "with", "by", "about",
+			"like", "through", "over", "before", "between", "after", "since", "without",
+			"under", "within", "along", "following", "across", "behind", "beyond",
+			"plus", "except", "but", "up", "out", "around", "down", "off", "above", "near",
+			"and", "or", "if", "then", "else", "when", "where", "how", "what", "why", "who",
+			"please", "can", "could", "would", "should", "may", "might", "must", "need",
+			"help", "create", "make", "do", "implement", "build", "develop", "write", "code",
+			"add", "update", "change", "modify", "fix", "solve", "resolve", "improve",
+		]
+
+		// فلترة الكلمات الشائعة والكلمات القصيرة
+		const filteredWords = words.filter(word =>
+			!commonWords.includes(word) && word.length > 3
+		)
+
+		// استخراج المفاهيم (الكلمات المتبقية)
+		const concepts = new Set<string>()
+
+		// إضافة الكلمات المفردة كمفاهيم
+		for (const word of filteredWords) {
+			concepts.add(word)
+		}
+
+		// إضافة أزواج الكلمات المتتالية كمفاهيم مركبة
+		for (let i = 0; i < filteredWords.length - 1; i++) {
+			const phrase = `${filteredWords[i]} ${filteredWords[i + 1]}`
+			concepts.add(phrase)
+		}
+
+		// تحويل المجموعة إلى مصفوفة وإرجاع أهم 5 مفاهيم
+		return Array.from(concepts).slice(0, 5)
 	}
 
 	// Send any JSON serializable data to the react app
@@ -256,6 +327,13 @@ export class Controller {
 				try {
 					await advancedSystem.initialize()
 					console.log("Advanced systems initialized")
+
+					// توليد رؤى من البيانات المتعلمة
+					const insights = await advancedSystem.generateInsights()
+					if (insights && insights.length > 0) {
+						console.log(`Generated ${insights.length} insights from learning data`)
+						// يمكن استخدام هذه الرؤى لتحسين تجربة المستخدم في المستقبل
+					}
 				} catch (error) {
 					console.error("Error initializing advanced systems:", error)
 				}
@@ -517,6 +595,13 @@ export class Controller {
 				}
 				break
 			}
+			case "taskFeedback": {
+				// معالجة رد فعل المستخدم على المهمة
+				if (message.taskId && message.feedback) {
+					await this.handleUserFeedback(message.taskId, message.feedback)
+				}
+				break
+			}
 			case "requestTotalTasksSize": {
 				this.refreshTotalTasksSize()
 				break
@@ -656,6 +741,24 @@ export class Controller {
 				}
 				break
 			}
+			case "updateAdvancedSystemsSettings": {
+				if (message.settings) {
+					try {
+						// تحديث إعدادات الأنظمة المتقدمة في الحالة العامة
+						// استخدام طريقة مختلفة لتخزين الإعدادات
+						await this.context.globalState.update("advancedSystemsSettings", message.settings)
+
+						// تطبيق الإعدادات على الأنظمة المتقدمة
+						this.updateAdvancedSystemsConfiguration(message.settings)
+
+						console.log("Advanced systems settings updated:", message.settings)
+						await this.postStateToWebview()
+					} catch (error) {
+						console.error("Error updating advanced systems settings:", error)
+					}
+				}
+				break
+			}
 			// Add more switch case statements here as more webview message commands
 			// are created within the webview context (i.e. inside media/main.js)
 		}
@@ -665,6 +768,68 @@ export class Controller {
 		await updateGlobalState(this.context, "telemetrySetting", telemetrySetting)
 		const isOptedIn = telemetrySetting !== "disabled"
 		telemetryService.updateTelemetryState(isOptedIn)
+	}
+
+	/**
+	 * تحديث تكوين الأنظمة المتقدمة
+	 * @param settings إعدادات الأنظمة المتقدمة
+	 */
+	private updateAdvancedSystemsConfiguration(settings: any): void {
+		try {
+			// التحقق من وجود النظام المتقدم
+			if (!advancedSystem) {
+				console.warn("Advanced system not available for configuration update")
+				return
+			}
+
+			console.log("Updating advanced systems configuration:", settings)
+
+			// تكوين منفذ المهام المتوازي
+			if (settings.parallelTaskExecutor !== undefined) {
+				const parallelExecutor = advancedSystem.getParallelExecutor()
+
+				// تحديث الحد الأقصى للمهام المتزامنة
+				if (settings.maxConcurrentTasks !== undefined && typeof settings.maxConcurrentTasks === "number") {
+					parallelExecutor.setMaxConcurrentTasks(settings.maxConcurrentTasks)
+				}
+
+				// تحديث الحد الأقصى لعدد مرات إعادة المحاولة
+				if (settings.maxRetries !== undefined && typeof settings.maxRetries === "number") {
+					parallelExecutor.setMaxRetries(settings.maxRetries)
+				}
+
+				// تفعيل/تعطيل منفذ المهام المتوازي
+				parallelExecutor.setEnabled(settings.parallelTaskExecutor)
+			}
+
+			// تكوين نظام التعلم
+			if (settings.learningSystem !== undefined) {
+				const learningSystem = advancedSystem.getLearningSystem()
+
+				// تفعيل/تعطيل نظام التعلم
+				learningSystem.setEnabled(settings.learningSystem)
+			}
+
+			// تكوين نظام الذاكرة
+			if (settings.memorySystem !== undefined) {
+				const memorySystem = advancedSystem.getMemorySystem()
+
+				// تفعيل/تعطيل نظام الذاكرة
+				memorySystem.setEnabled(settings.memorySystem)
+			}
+
+			// تكوين محلل الكود
+			if (settings.codeAnalyzer !== undefined) {
+				const codeAnalyzer = advancedSystem.getCodeAnalyzer()
+
+				// تفعيل/تعطيل محلل الكود
+				codeAnalyzer.setEnabled(settings.codeAnalyzer)
+			}
+
+			console.log("Advanced systems configuration updated successfully")
+		} catch (error) {
+			console.error("Error updating advanced systems configuration:", error)
+		}
 	}
 
 	async togglePlanActModeWithChatSettings(chatSettings: ChatSettings, chatContent?: ChatContent) {
@@ -797,8 +962,8 @@ export class Controller {
 						await updateGlobalState(this.context, "lmStudioModelId", newModelId)
 						break
 					case "litellm":
-						await updateGlobalState(this.context, "previousModeModelId", apiConfiguration.liteLlmModelId)
-						await updateGlobalState(this.context, "previousModeModelInfo", apiConfiguration.liteLlmModelInfo)
+						await updateGlobalState(this.context, "liteLlmModelId", newModelId)
+						await updateGlobalState(this.context, "liteLlmModelInfo", newModelInfo)
 						break
 					case "requesty":
 						await updateGlobalState(this.context, "requestyModelId", newModelId)
@@ -1472,7 +1637,162 @@ export class Controller {
 			history.push(item)
 		}
 		await updateGlobalState(this.context, "taskHistory", history)
+
+		// تعلم من المهمة المكتملة
+		await this.handleTaskCompletion(item)
+
 		return history
+	}
+
+	/**
+	 * معالجة اكتمال المهمة والتعلم منها
+	 * @param item عنصر المهمة
+	 */
+	private async handleTaskCompletion(item: HistoryItem): Promise<void> {
+		try {
+			// التحقق من وجود المهمة والنظام المتقدم
+			if (!item || !item.task || !advancedSystem) {
+				return
+			}
+
+			// استخراج معلومات المهمة
+			const taskId = item.id
+			const taskText = item.task
+			const taskSuccess = true // نفترض أن المهمة ناجحة إذا تم إضافتها إلى التاريخ
+
+			console.log(`Learning from completed task: ${taskId}`)
+
+			// تعلم مفاهيم جديدة من المهمة
+			const concepts = this.extractConcepts(taskText)
+			for (const concept of concepts) {
+				await advancedSystem.learnConcept(concept, taskText, 0.8)
+			}
+
+			// تعلم تفضيلات المستخدم من المهمة
+			// استخراج تفضيلات اللغة
+			if (taskText.includes("typescript") || taskText.includes("ts")) {
+				await advancedSystem.learnUserPreference("language", "typescript", taskText)
+			} else if (taskText.includes("javascript") || taskText.includes("js")) {
+				await advancedSystem.learnUserPreference("language", "javascript", taskText)
+			} else if (taskText.includes("python") || taskText.includes("py")) {
+				await advancedSystem.learnUserPreference("language", "python", taskText)
+			}
+
+			// استخراج تفضيلات نمط الكود
+			if (taskText.includes("format") || taskText.includes("style") || taskText.includes("lint")) {
+				await advancedSystem.learnUserPreference("code_style", "clean_code", taskText)
+			}
+
+			// إنشاء رد فعل للتعلم
+			const feedback = {
+				taskId,
+				type: taskSuccess ? "positive" : "negative",
+				context: taskText,
+				action: "complete_task",
+				details: "Task completed successfully and added to history",
+			}
+
+			// تعلم من رد الفعل
+			await advancedSystem.learnFromFeedback(taskId, feedback)
+
+			console.log(`Learning from task ${taskId} completed`)
+		} catch (error) {
+			console.error("Error learning from completed task:", error)
+		}
+	}
+
+	/**
+	 * معالجة رد فعل المستخدم على المهمة
+	 * @param taskId معرف المهمة
+	 * @param feedback رد فعل المستخدم
+	 */
+	private async handleUserFeedback(taskId: string, feedback: any): Promise<void> {
+		try {
+			// التحقق من وجود النظام المتقدم
+			if (!advancedSystem) {
+				console.warn("Advanced system not available for learning from feedback")
+				return
+			}
+
+			console.log(`Processing user feedback for task ${taskId}:`, feedback.type)
+
+			// الحصول على المهمة من التاريخ
+			const history = ((await getGlobalState(this.context, "taskHistory")) as HistoryItem[]) || []
+			const taskItem = history.find(item => item.id === taskId)
+
+			if (!taskItem || !taskItem.task) {
+				console.warn(`Task ${taskId} not found in history`)
+				return
+			}
+
+			// استخراج معلومات المهمة
+			const taskText = taskItem.task
+
+			// تحديد نوع رد الفعل
+			const feedbackType = feedback.type || "neutral"
+			const feedbackDetails = feedback.details || ""
+
+			// تعلم من رد الفعل
+			const userFeedback = {
+				taskId,
+				type: feedbackType,
+				context: taskText,
+				action: "user_feedback",
+				details: feedbackDetails,
+			}
+
+			// تعلم من رد الفعل
+			await advancedSystem.learnFromFeedback(taskId, userFeedback)
+
+			// تحديث تفضيلات المستخدم بناءً على رد الفعل
+			if (feedbackType === "positive") {
+				// تعزيز التفضيلات المستخدمة في المهمة
+				const concepts = this.extractConcepts(taskText)
+				for (const concept of concepts) {
+					await advancedSystem.learnConcept(concept, taskText, 0.9)
+				}
+
+				// تعلم تفضيلات إضافية من التفاصيل
+				if (feedbackDetails) {
+					const detailConcepts = this.extractConcepts(feedbackDetails)
+					for (const concept of detailConcepts) {
+						await advancedSystem.learnConcept(concept, feedbackDetails, 0.8)
+					}
+
+					// تعلم تفضيلات نمط الكود
+					if (feedbackDetails.includes("format") || feedbackDetails.includes("style")) {
+						await advancedSystem.learnUserPreference("code_style", "user_preferred_style", feedbackDetails)
+					}
+
+					// تعلم تفضيلات التواصل
+					if (feedbackDetails.includes("explain") || feedbackDetails.includes("detail")) {
+						await advancedSystem.learnUserPreference("communication_style", "detailed", feedbackDetails)
+					} else if (feedbackDetails.includes("concise") || feedbackDetails.includes("brief")) {
+						await advancedSystem.learnUserPreference("communication_style", "concise", feedbackDetails)
+					}
+				}
+			} else if (feedbackType === "negative") {
+				// تعلم من التفاصيل السلبية
+				if (feedbackDetails) {
+					// تحليل التفاصيل لفهم ما لم يعجب المستخدم
+					if (feedbackDetails.includes("format") || feedbackDetails.includes("style")) {
+						await advancedSystem.learnUserPreference("code_style", "not_" + this.extractConcepts(feedbackDetails)[0], feedbackDetails)
+					}
+
+					if (feedbackDetails.includes("explain") || feedbackDetails.includes("detail")) {
+						if (feedbackDetails.includes("more")) {
+							await advancedSystem.learnUserPreference("communication_style", "more_detailed", feedbackDetails)
+						} else if (feedbackDetails.includes("less")) {
+							await advancedSystem.learnUserPreference("communication_style", "less_detailed", feedbackDetails)
+						}
+					}
+				}
+			}
+
+			console.log(`User feedback for task ${taskId} processed successfully`)
+		} catch (error) {
+			console.error("Error processing user feedback:", error)
+		}
 	}
 
 	// private async clearState() {
@@ -1512,7 +1832,7 @@ export class Controller {
 					title: "Generating commit message...",
 					cancellable: false,
 				},
-				async (progress, token) => {
+				async (_progress, _token) => {
 					try {
 						// Format the git diff into a prompt
 						const prompt = `Based on the following git diff, generate a concise and descriptive commit message:

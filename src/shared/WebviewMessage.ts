@@ -52,6 +52,8 @@ export interface WebviewMessage {
 		| "deleteClineRule"
 		| "updateTerminalConnectionTimeout"
 		| "setActiveQuote"
+		| "taskFeedback"
+		| "updateAdvancedSystemsSettings"
 
 	// | "relaunchChromeDebugMode"
 	text?: string
@@ -106,6 +108,13 @@ export interface WebviewMessage {
 
 	offset?: number
 	shellIntegrationTimeout?: number
+
+	// For taskFeedback
+	taskId?: string
+	feedback?: any
+
+	// For updateAdvancedSystemsSettings
+	settings?: any
 }
 
 export type ClineAskResponse = "yesButtonClicked" | "noButtonClicked" | "messageResponse"

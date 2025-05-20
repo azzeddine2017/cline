@@ -121,4 +121,21 @@ export const ar = {
 	"prompt.systemMessage": "أنت كلاين، مساعد ذكاء اصطناعي يساعد في مهام البرمجة وتطوير البرمجيات.",
 	"prompt.userMessage": "مرحباً، أحتاج إلى مساعدة في مشروعي.",
 	"prompt.assistantMessage": "مرحباً! يسعدني مساعدتك في مشروعك. ما الذي تعمل عليه؟",
+
+	// Advanced Systems Settings
+	"settings.advancedSystems.title": "الأنظمة المتقدمة",
+	"settings.advancedSystems.enable": "تفعيل الأنظمة المتقدمة",
+	"settings.advancedSystems.enableDescription": "تفعيل الأنظمة المتقدمة لتحليل الكود والتعلم والذاكرة وتنفيذ المهام المتوازية.",
+	"settings.advancedSystems.enableCodeAnalyzer": "تفعيل محلل الكود",
+	"settings.advancedSystems.enableCodeAnalyzerDescription": "يحلل الكود الخاص بك لتقديم اقتراحات وأفكار أفضل.",
+	"settings.advancedSystems.enableLearningSystem": "تفعيل نظام التعلم",
+	"settings.advancedSystems.enableLearningSystemDescription": "يتعلم من تفاعلاتك لتحسين الاقتراحات المستقبلية.",
+	"settings.advancedSystems.enableMemorySystem": "تفعيل نظام الذاكرة",
+	"settings.advancedSystems.enableMemorySystemDescription": "يتذكر المفاهيم والأنماط والتفضيلات عبر الجلسات.",
+	"settings.advancedSystems.enableParallelTaskExecutor": "تفعيل منفذ المهام المتوازي",
+	"settings.advancedSystems.enableParallelTaskExecutorDescription": "ينفذ مهام متعددة بالتوازي لتحسين الأداء.",
+	"settings.advancedSystems.maxConcurrentTasks": "الحد الأقصى للمهام المتزامنة",
+	"settings.advancedSystems.maxConcurrentTasksDescription": "الحد الأقصى لعدد المهام التي يمكن تنفيذها بالتوازي.",
+	"settings.advancedSystems.maxRetries": "الحد الأقصى لعدد مرات إعادة المحاولة",
+	"settings.advancedSystems.maxRetriesDescription": "الحد الأقصى لعدد مرات إعادة المحاولة للمهام الفاشلة."
 }

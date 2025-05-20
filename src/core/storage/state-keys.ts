@@ -89,5 +89,6 @@ export type GlobalStateKey =
 	| "requestTimeoutMs"
 	| "shellIntegrationTimeout"
 	| "isNewUser"
+	| "advancedSystemsSettings"
 
 export type LocalStateKey = "localClineRulesToggles"
