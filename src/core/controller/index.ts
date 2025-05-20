@@ -10,9 +10,9 @@ import { handleGrpcRequest, handleGrpcRequestCancel } from "./grpc-handler"
 import { handleModelsServiceRequest } from "./models"
 // Create a simple EmptyRequest class to replace the imported one
 class EmptyRequest {
-    static create() {
-        return {};
-    }
+	static create() {
+		return {}
+	}
 }
 import { buildApiHandler } from "@api/index"
 import { cleanupLegacyCheckpoints } from "@integrations/checkpoints/CheckpointMigration"

@@ -4524,7 +4524,7 @@ export class Task {
 	applyLearning(patterns: any[], preferences: Map<string, string>): void {
 		this.learningData = {
 			patterns,
-			preferences: Object.fromEntries(preferences)
+			preferences: Object.fromEntries(preferences),
 		}
 	}
 
